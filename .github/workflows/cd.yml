@@ -1,4 +1,4 @@
-name: CD / Continuous Deployment (Backend: Render, Frontend: Vercel)
+name: "CD / Continuous Deployment (Backend: Render, Frontend: Vercel)"
 
 on:
   push:
