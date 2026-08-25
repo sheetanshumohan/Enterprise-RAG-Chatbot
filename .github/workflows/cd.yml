@@ -1,4 +1,4 @@
-name: "CD / Continuous Deployment (Backend: Render, Frontend: Vercel)"
+name: "CD / Continuous Deployment (Backend: Render, Frontend: Streamlit Cloud)"
 
 on:
   push:
@@ -127,10 +127,10 @@ jobs:
           echo "✅ Worker deploy signal dispatched."
 
   # ============================================================================
-  # Stage 2B: Deploy Frontend UI to Vercel
+  # Stage 2B: Frontend Continuous Deployment on Streamlit Community Cloud
   # ============================================================================
-  deploy-frontend-vercel:
-    name: Deploy Frontend UI to Vercel
+  deploy-frontend-streamlit:
+    name: Streamlit Community Cloud Deployment
     runs-on: ubuntu-latest
     needs: [test-backend, test-e2e, test-frontend]
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch'
@@ -138,26 +138,10 @@ jobs:
       - name: Checkout Codebase
         uses: actions/checkout@v4
 
-      - name: Deploy to Vercel via CLI / Action
-        if: env.VERCEL_TOKEN != ''
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          working-directory: ./apps/frontend
-          vercel-args: ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && '--prod' || '' }}
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-
-      - name: Deploy to Vercel via Webhook Deploy Hook (Fallback)
-        if: env.VERCEL_DEPLOY_HOOK != '' && env.VERCEL_TOKEN == ''
-        env:
-          VERCEL_DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK }}
+      - name: Verify Streamlit App Structure
         run: |
-          echo "🚀 Triggering Vercel deployment via Deploy Hook..."
-          curl -f -X POST "${VERCEL_DEPLOY_HOOK}"
-          echo "✅ Vercel deploy hook triggered."
+          test -f apps/frontend/app.py && echo "✅ apps/frontend/app.py entrypoint verified."
+          echo "Streamlit Community Cloud automatically auto-deploys updates on push to main branch."
 
   # ============================================================================
   # Stage 3: Deployment Summary
@@ -165,7 +149,7 @@ jobs:
   deployment-summary:
     name: Deployment Summary
     runs-on: ubuntu-latest
-    needs: [deploy-backend-render, deploy-frontend-vercel]
+    needs: [deploy-backend-render, deploy-frontend-streamlit]
     if: always()
     steps:
       - name: Report Deployment Status
@@ -175,5 +159,5 @@ jobs:
           echo " Commit: ${{ github.sha }}"
           echo " Target Environment: ${{ inputs.target_env || 'production' }}"
           echo " - Backend & Worker: Render"
-          echo " - Frontend: Vercel"
+          echo " - Frontend: Streamlit Community Cloud (share.streamlit.io)"
           echo "===================================================="
