@@ -1,0 +1,15 @@
+# Streamlit Production Configuration
+[client]
+toolbarMode = "viewer"
+showErrorDetails = false
+
+[server]
+runOnSave = false
+headless = true
+enableCORS = false
+enableXsrfProtection = true
+maxUploadSize = 25
+enableWebsocketCompression = true
+
+[browser]
+gatherUsageStats = false

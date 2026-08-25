@@ -1,0 +1,21 @@
+[project]
+name = "knowledge-assistant-frontend"
+version = "0.1.0"
+description = "AI Knowledge Assistant Streamlit UI"
+requires-python = ">=3.11"
+dependencies = [
+  "streamlit>=1.38.0",
+  "httpx>=0.27.0",
+  "httpx-sse>=0.4.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3.2",
+  "pytest-mock>=3.14.0",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+

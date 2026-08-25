@@ -1,0 +1,132 @@
+# ==============================================================================
+# Render Production Blueprint for AI Knowledge Assistant
+# ==============================================================================
+#
+# Deploy: Push this repo to GitHub, then in the Render dashboard choose
+# New -> Blueprint and point it at the repo.
+#
+# External Cloud Services Connected:
+#   - Postgres: Neon Serverless Postgres (DATABASE_URL)
+#   - Redis / Celery: Upstash Redis (REDIS_URL, CELERY_BROKER_URL, CELERY_RESULT_BACKEND)
+#   - Vector Store: Qdrant Cloud (QDRANT_URL, QDRANT_API_KEY)
+#   - Observability: Sentry (SENTRY_DSN)
+#   - LLM Tracing: LangSmith (LANGCHAIN_API_KEY, LANGCHAIN_PROJECT)
+#   - Metrics: Prometheus (/metrics endpoint enabled)
+
+services:
+  # --- Production FastAPI Backend (Gunicorn + Uvicorn Workers) ---
+  - type: web
+    name: ka-backend
+    runtime: docker
+    dockerfilePath: ./docker/backend.Dockerfile
+    dockerContext: .
+    plan: starter # Upgraded from free for production SLA and no cold starts
+    healthCheckPath: /health
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL # Neon Postgres connection string (e.g. postgresql+asyncpg://...@...neon.tech/neondb?ssl=require)
+        sync: false
+      - key: REDIS_URL # Upstash Redis (rediss://...)
+        sync: false
+      - key: CELERY_BROKER_URL # Upstash Redis broker (rediss://...)
+        sync: false
+      - key: CELERY_RESULT_BACKEND # Upstash Redis backend (rediss://...)
+        sync: false
+      - key: QDRANT_URL # Qdrant Cloud URL (https://...cloud.qdrant.io:6333)
+        sync: false
+      - key: QDRANT_API_KEY # Qdrant Cloud API Key
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: "*" # Set to your frontend domain in production (e.g., https://ka-frontend.onrender.com)
+      - key: EMBEDDING_PROVIDER
+        value: openai
+      - key: EMBEDDING_API_KEY
+        sync: false
+      - key: EMBEDDING_DIM
+        value: "1536"
+      - key: LLM_PROVIDER
+        value: claude
+      - key: LLM_API_KEY
+        sync: false
+      - key: USE_CROSS_ENCODER_RERANKER
+        value: "false"
+      - key: MAX_UPLOAD_MB
+        value: "25"
+      - key: RATE_LIMIT_PER_MINUTE
+        value: "60"
+      # Sentry Error Tracking
+      - key: SENTRY_DSN
+        sync: false
+      - key: SENTRY_TRACES_SAMPLE_RATE
+        value: "0.2"
+      # Prometheus Metrics
+      - key: PROMETHEUS_ENABLED
+        value: "true"
+      # LangSmith Tracing
+      - key: LANGCHAIN_TRACING_V2
+        value: "true"
+      - key: LANGCHAIN_API_KEY
+        sync: false
+      - key: LANGCHAIN_PROJECT
+        value: ai-knowledge-assistant
+      - key: LANGCHAIN_ENDPOINT
+        value: https://api.smith.langchain.com
+
+  # --- Production Celery Worker (Background Document Ingestion) ---
+  - type: worker
+    name: ka-worker
+    runtime: docker
+    dockerfilePath: ./docker/worker.Dockerfile
+    dockerContext: .
+    plan: starter # Upgraded for dedicated CPU during heavy PDF parsing/chunking
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: DATABASE_URL # Neon Postgres
+        sync: false
+      - key: REDIS_URL # Upstash Redis
+        sync: false
+      - key: CELERY_BROKER_URL # Upstash Redis
+        sync: false
+      - key: CELERY_RESULT_BACKEND # Upstash Redis
+        sync: false
+      - key: QDRANT_URL # Qdrant Cloud
+        sync: false
+      - key: QDRANT_API_KEY # Qdrant Cloud
+        sync: false
+      - key: EMBEDDING_PROVIDER
+        value: openai
+      - key: EMBEDDING_API_KEY
+        sync: false
+      - key: EMBEDDING_DIM
+        value: "1536"
+      - key: LLM_PROVIDER
+        value: claude
+      - key: LLM_API_KEY
+        sync: false
+      # Sentry Error Tracking for Celery Worker
+      - key: SENTRY_DSN
+        sync: false
+      - key: SENTRY_TRACES_SAMPLE_RATE
+        value: "0.2"
+      # LangSmith Tracing
+      - key: LANGCHAIN_TRACING_V2
+        value: "true"
+      - key: LANGCHAIN_API_KEY
+        sync: false
+      - key: LANGCHAIN_PROJECT
+        value: ai-knowledge-assistant
+
+  # --- Production Streamlit Frontend ---
+  - type: web
+    name: ka-frontend
+    runtime: docker
+    dockerfilePath: ./docker/frontend.Dockerfile
+    dockerContext: .
+    plan: starter
+    envVars:
+      - key: KNOWLEDGE_ASSISTANT_API_URL
+        value: https://ka-backend.onrender.com # Update with ka-backend's URL

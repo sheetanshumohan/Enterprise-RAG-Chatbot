@@ -1,0 +1,55 @@
+# Python & Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+eggs/
+*.egg
+
+# Virtual Environments
+.venv/
+venv/
+env/
+ENV/
+apps/*/.venv/
+
+# Environment Variables & Secrets
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# Testing & Quality
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.hypothesis/
+
+# Logs, Databases & Local Storage
+*.log
+logs/
+*.sqlite
+*.sqlite3
+*.db
+data/
+uploads/
+storage/
+qdrant_storage/
+opensearch_data/
+
+# Node, PNPM & Turborepo
+node_modules/
+.turbo/
+.pnpm-store/
+
+# IDE & OS Artifacts
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+.gemini/

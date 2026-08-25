@@ -1,0 +1,14 @@
+{
+  "venvPath": "apps/backend",
+  "venv": ".venv",
+  "executionEnvironments": [
+    {
+      "root": "apps/backend",
+      "extraPaths": ["apps/backend/src", "apps/backend"]
+    },
+    {
+      "root": "apps/frontend",
+      "extraPaths": ["apps/frontend"]
+    }
+  ]
+}

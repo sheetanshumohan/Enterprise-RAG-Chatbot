@@ -1,0 +1,47 @@
+[project]
+name = "knowledge-assistant-backend"
+version = "0.1.0"
+description = "AI Knowledge Assistant backend - FastAPI, DDD/Clean Architecture"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115.0",
+  "uvicorn[standard]>=0.30.0",
+  "sqlalchemy>=2.0.35",
+  "asyncpg>=0.29.0",
+  "alembic>=1.13.2",
+  "pydantic[email]>=2.9.0",
+  "email-validator>=2.0.0",
+  "pydantic-settings>=2.5.2",
+  "python-jose[cryptography]>=3.3.0",
+  "passlib[bcrypt]>=1.7.4",
+  "bcrypt==4.0.1",  # pinned: passlib 1.7.4 does not support bcrypt>=4.1's API
+  "python-multipart>=0.0.9",
+  "qdrant-client>=1.11.0",
+  "opensearch-py>=2.6.0",
+  "aiohttp>=3.9.0",
+  "rank-bm25>=0.2.2",
+  "redis>=5.0.8",
+  "celery>=5.4.0",
+  "anthropic>=0.34.0",
+  "openai>=1.47.0",
+  "google-generativeai>=0.8.0",
+  "numpy>=1.26.4",
+  "pypdf>=4.3.1",
+  "python-docx>=1.1.2",
+  "markdown-it-py>=3.0.0",
+  "tiktoken>=0.7.0",
+  "httpx>=0.27.0",
+  "tenacity>=9.0.0",
+  "sentry-sdk[fastapi,celery]>=2.13.0",
+  "prometheus-fastapi-instrumentator>=7.0.0",
+  "prometheus-client>=0.20.0",
+  "langsmith>=0.1.100",
+  "gunicorn>=23.0.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.3.2", "pytest-asyncio>=0.24.0", "ruff>=0.6.8", "httpx>=0.27.0", "aiosqlite>=0.20.0"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "."]
+asyncio_mode = "auto"
