@@ -116,16 +116,32 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 60 * 24
 
-    # Embeddings
+    # Embeddings (Default: text-embedding-3-small - 1536 dims, $0.02 / 1M tokens)
     embedding_provider: str = "openai"
     embedding_api_key: str = ""
     embedding_model: str = "text-embedding-3-small"
     embedding_dim: int = 1536
 
-    # LLM
-    llm_provider: str = "claude"  # "claude" | "openai" | "gemini"
+    # LLM (Default: gpt-4o-mini - fast, powerful, and very inexpensive at $0.15 / 1M tokens)
+    llm_provider: str = "openai"  # "openai" | "gemini" | "claude"
     llm_api_key: str = ""
-    llm_model: str | None = None
+    llm_model: str | None = "gpt-4o-mini"
+
+    # Direct API key environment aliases
+    openai_api_key: str | None = None
+    gemini_api_key: str | None = None
+
+    def model_post_init(self, __context) -> None:
+        if self.openai_api_key:
+            if not self.llm_api_key and self.llm_provider == "openai":
+                self.llm_api_key = self.openai_api_key
+            if not self.embedding_api_key and self.embedding_provider == "openai":
+                self.embedding_api_key = self.openai_api_key
+        if self.gemini_api_key:
+            if not self.llm_api_key and self.llm_provider == "gemini":
+                self.llm_api_key = self.gemini_api_key
+            if not self.embedding_api_key and self.embedding_provider == "gemini":
+                self.embedding_api_key = self.gemini_api_key
 
     # Chunking
     chunk_parent_max_tokens: int = 1500
