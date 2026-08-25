@@ -1,9 +1,11 @@
-name: Keep-Alive / Prevent Inactivity Suspension
+name: "Keep-Alive / Prevent Inactivity Suspension"
 
 on:
   schedule:
-    # Triggers every 2 days at 08:00 UTC (e.g. 1st, 3rd, 5th of every month)
-    - cron: "0 8 */2 * *"
+    # Triggers automatically twice daily (00:00 & 12:00 UTC)
+    - cron: "0 0,12 * * *"
+  push:
+    branches: [main, master]
   workflow_dispatch:
 
 jobs:
@@ -14,10 +16,10 @@ jobs:
       - name: Checkout Codebase
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.11
+      - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
           cache: "pip"
 
       - name: Install Ping Dependencies
