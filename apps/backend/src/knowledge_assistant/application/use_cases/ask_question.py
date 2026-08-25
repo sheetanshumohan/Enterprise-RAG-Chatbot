@@ -89,6 +89,7 @@ MANDATORY RESPONSE STRUCTURE & GUIDELINES:
 2. 📊 SYSTEM ARCHITECTURE & WORKFLOW DIAGRAMS:
    - For any concept involving systems, workflows, data pipelines, neural architectures, component interactions, or comparative designs, include a clean, detailed Mermaid diagram (```mermaid ... ```).
    - Use standard Mermaid syntax (e.g. `flowchart TD`, `flowchart LR`, `sequenceDiagram`, `stateDiagram-v2`).
+   - CRITICAL MERMAID SYNTAX: Always enclose node label text in double quotes inside brackets (e.g., `id["Feed Forward Network (Decoder)"]` instead of `id[Feed Forward Network (Decoder)]`). Any label with parentheses `()`, brackets, or punctuation must be double-quoted to prevent Mermaid parser errors.
    - Group related components logically using subgraphs and use descriptive node labels.
    - Follow the diagram with a clear narrative walkthrough detailing the operational lifecycle and data flow.
 

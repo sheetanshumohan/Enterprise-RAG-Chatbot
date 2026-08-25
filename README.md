@@ -1,5 +1,7 @@
 # 🧠 Enterprise AI Knowledge Assistant
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://enterprise-rag-chatbot-4waqg6jq6pnbgna2qszccc.streamlit.app)
+[![Backend Status](https://img.shields.io/badge/Render-API%20Online-46E3B7.svg?style=flat&logo=render&logoColor=black)](https://enterprise-rag-chatbot-ka-backend.onrender.com/health/ready)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.38+-FF4B4B.svg?style=flat&logo=streamlit&logoColor=white)](https://streamlit.io)
 [![Python](https://img.shields.io/badge/Python-3.11%20%7C%203.12-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org)
@@ -12,6 +14,13 @@
 [![LangSmith](https://img.shields.io/badge/LangSmith-Tracing-000000.svg?style=flat&logo=langchain&logoColor=white)](https://smith.langchain.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+> 🚀 **Live Production Deployment**:
+> - 🌐 **Frontend Application (Streamlit Cloud):** [https://enterprise-rag-chatbot-4waqg6jq6pnbgna2qszccc.streamlit.app](https://enterprise-rag-chatbot-4waqg6jq6pnbgna2qszccc.streamlit.app)
+> - ⚡ **Backend API Gateway (Render):** [https://enterprise-rag-chatbot-ka-backend.onrender.com](https://enterprise-rag-chatbot-ka-backend.onrender.com)
+>   - 📚 **Swagger / OpenAPI Documentation:** [https://enterprise-rag-chatbot-ka-backend.onrender.com/docs](https://enterprise-rag-chatbot-ka-backend.onrender.com/docs)
+>   - 🩺 **Health Readiness Probe:** [https://enterprise-rag-chatbot-ka-backend.onrender.com/health/ready](https://enterprise-rag-chatbot-ka-backend.onrender.com/health/ready)
+>   - 📊 **Prometheus Metrics:** [https://enterprise-rag-chatbot-ka-backend.onrender.com/metrics](https://enterprise-rag-chatbot-ka-backend.onrender.com/metrics)
+
 An enterprise-grade, multi-tenant, agentic Retrieval-Augmented Generation (**RAG**) knowledge assistant platform. Upload multi-format documents (PDF, DOCX, Markdown, TXT), perform hybrid semantic & lexical keyword search, and receive streaming answers with inline citations, verified confidence scores, and reasoning summaries.
 
 Built from the ground up with **Domain-Driven Design (DDD) & Hexagonal Architecture** (Clean Architecture), distributed async ingestion, robust multi-tenancy, and production hardening for **1000+ concurrent users**.
@@ -19,6 +28,8 @@ Built from the ground up with **Domain-Driven Design (DDD) & Hexagonal Architect
 ---
 
 ## 📑 Table of Contents
+
+- [🌐 Live Production Deployments](#-live-production-deployments)
 
 - [1. Architectural Highlights](#1-architectural-highlights)
 - [2. System Architecture & Diagrams](#2-system-architecture--diagrams)
@@ -31,10 +42,11 @@ Built from the ground up with **Domain-Driven Design (DDD) & Hexagonal Architect
 - [4. Technology Stack](#4-technology-stack)
 - [5. Repository Structure](#5-repository-structure)
 - [6. API Endpoints](#6-api-endpoints)
-- [7. Getting Started](#7-getting-started)
-  - [7.1 Quickstart with Docker Compose](#71-quickstart-with-docker-compose)
-  - [7.2 Local Development](#72-local-development)
-  - [7.3 Environment Variables](#73-environment-variables)
+- [7. Getting Started & Deployments](#7-getting-started--deployments)
+  - [7.1 Live Production Endpoints](#71-live-production-endpoints)
+  - [7.2 Quickstart with Docker Compose](#72-quickstart-with-docker-compose)
+  - [7.3 Local Development](#73-local-development)
+  - [7.4 Environment Variables](#74-environment-variables)
 - [8. Testing & Quality Assurance](#8-testing--quality-assurance)
 - [9. Production Hardening & Cloud Infrastructure](#9-production-hardening--cloud-infrastructure)
 - [10. Evaluation & Benchmarking](#10-evaluation--benchmarking)
@@ -387,9 +399,23 @@ Enterprise-RAG-main/
 
 ---
 
-## 7. Getting Started
+## 7. Getting Started & Deployments
 
-### 7.1 Quickstart with Docker Compose
+### 7.1 Live Production Endpoints
+
+The full system is deployed in production and immediately accessible:
+
+| Service | Platform | Endpoint URL | Status / Notes |
+| :--- | :--- | :--- | :--- |
+| **Frontend Web App** | Streamlit Community Cloud | [https://enterprise-rag-chatbot-4waqg6jq6pnbgna2qszccc.streamlit.app](https://enterprise-rag-chatbot-4waqg6jq6pnbgna2qszccc.streamlit.app) | Live Interactive UI |
+| **Backend API Gateway** | Render Cloud | [https://enterprise-rag-chatbot-ka-backend.onrender.com](https://enterprise-rag-chatbot-ka-backend.onrender.com) | FastAPI REST & SSE Gateway |
+| **Interactive API Docs** | Render Cloud | [https://enterprise-rag-chatbot-ka-backend.onrender.com/docs](https://enterprise-rag-chatbot-ka-backend.onrender.com/docs) | Swagger UI / OpenAPI Schema |
+| **Health Readiness Probe**| Render Cloud | [https://enterprise-rag-chatbot-ka-backend.onrender.com/health/ready](https://enterprise-rag-chatbot-ka-backend.onrender.com/health/ready) | Postgres, Redis, Vector, BM25 checks |
+| **Prometheus Metrics** | Render Cloud | [https://enterprise-rag-chatbot-ka-backend.onrender.com/metrics](https://enterprise-rag-chatbot-ka-backend.onrender.com/metrics) | Scrape endpoint |
+
+---
+
+### 7.2 Quickstart with Docker Compose
 
 The fastest way to launch the entire stack locally:
 
@@ -418,7 +444,7 @@ The fastest way to launch the entire stack locally:
 
 ---
 
-### 7.2 Local Development
+### 7.3 Local Development
 
 #### Prerequisites
 - Python 3.11+
@@ -451,7 +477,7 @@ streamlit run app.py --server.port 8501
 
 ---
 
-### 7.3 Environment Variables
+### 7.4 Environment Variables
 
 Key configuration variables in `.env`:
 
