@@ -23,7 +23,9 @@ COPY apps/backend/alembic.ini ./alembic.ini
 COPY apps/backend/migrations ./migrations
 
 ENV PYTHONPATH=/app/src
+ENV PORT=8000
+ENV WEB_CONCURRENCY=1
+
 EXPOSE 8000
 
-CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "-w", "4", "-b", "0.0.0.0:8000", "--timeout", "120", "--keep-alive", "5", "--graceful-timeout", "30", "--access-logfile", "-", "--error-logfile", "-", "knowledge_assistant.interfaces.api.main:app"]
-
+CMD ["sh", "-c", "exec uvicorn knowledge_assistant.interfaces.api.main:app --host 0.0.0.0 --port ${PORT:-8000}"]

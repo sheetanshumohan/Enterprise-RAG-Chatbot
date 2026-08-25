@@ -15,9 +15,8 @@ RUN pip install --no-cache-dir --upgrade pip && \
     "prometheus-client>=0.20.0" \
     "langsmith>=0.1.100"
 
-
 COPY apps/backend/src ./src
 
 ENV PYTHONPATH=/app/src
 
-CMD ["celery", "-A", "knowledge_assistant.infrastructure.tasks.celery_app", "worker", "--loglevel=info"]
+CMD ["celery", "-A", "knowledge_assistant.infrastructure.tasks.celery_app", "worker", "--loglevel=info", "--concurrency=1"]
